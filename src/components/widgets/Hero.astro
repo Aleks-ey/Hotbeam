@@ -1,5 +1,4 @@
 ---
-import Image from '~/components/common/Image.astro';
 import Button from '~/components/ui/Button.astro';
 import type { CallToAction } from '~/types';
 
@@ -10,7 +9,7 @@ export interface Props {
   tagline?: string;
   content?: string;
   actions?: string | CallToAction[];
-  image?: string | any; // TODO: find HTMLElementProps
+  video?: string | any; // TODO: find HTMLElementProps
 }
 
 const {
@@ -20,7 +19,7 @@ const {
   tagline,
   content = await Astro.slots.render('content'),
   actions = await Astro.slots.render('actions'),
-  image = await Astro.slots.render('image'),
+  video = await Astro.slots.render('video'),
 } = Astro.props;
 ---
 
@@ -68,19 +67,19 @@ const {
       </div>
       <div>
         {
-          image && (
+          video && (
             <div class="relative m-auto max-w-5xl">
-              {typeof image === 'string' ? (
-                <Fragment set:html={image} />
+              {typeof video === 'string' ? (
+                <Fragment set:html={video} />
               ) : (
-                <Image
-                  class="mx-auto rounded-md w-full"
-                  widths={[400, 768, 1024, 2040]}
-                  sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
-                  loading="eager"
-                  width={1024}
-                  height={576}
-                  {...image}
+                <video
+                  class="w-full h-auto"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  poster={video.poster}
+                  src={video.src}
                 />
               )}
             </div>
