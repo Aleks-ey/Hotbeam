@@ -40,19 +40,19 @@ export const headerData = {
       text: 'Contact',
       href: getPermalink('/contact'),
     },
-    {
-      text: 'Legal',
-      links: [
-        {
-          text: 'Terms',
-          href: getPermalink('/terms'),
-        },
-        {
-          text: 'Privacy policy',
-          href: getPermalink('/privacy'),
-        },
-      ],
-    },
+    // {
+    //   text: 'Legal',
+    //   links: [
+    //     {
+    //       text: 'Terms',
+    //       href: getPermalink('/terms'),
+    //     },
+    //     {
+    //       text: 'Privacy policy',
+    //       href: getPermalink('/privacy'),
+    //     },
+    //   ],
+    // },
     // {
     //   text: 'Landing',
     //   links: [
@@ -112,7 +112,7 @@ export const headerData = {
     //   href: '#',
     // },
   ],
-  actions: [{ text: 'Download', href: '', target: '_blank' }],
+  actions: [{ text: 'Free Consultation', href: '', target: '_blank' }],
 };
 
 export const footerData = {
@@ -162,10 +162,10 @@ export const footerData = {
       ],
     },
   ],
-  secondaryLinks: [
-    { text: 'Terms', href: getPermalink('/terms') },
-    { text: 'Privacy Policy', href: getPermalink('/privacy') },
-  ],
+  // secondaryLinks: [
+  //   { text: 'Terms', href: getPermalink('/terms') },
+  //   { text: 'Privacy Policy', href: getPermalink('/privacy') },
+  // ],
   socialLinks: [
     { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: '#' },
