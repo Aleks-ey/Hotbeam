@@ -228,16 +228,22 @@ const metadata = {
   />
 
   <!-- CallToAction Widget *********** -->
-
   <CallToAction
-    title="Ready to boost your projects?"
-    subtitle="Join our community of satisfied customers who have transformed their work with our templates."
     actions={[
       {
         variant: 'primary',
-        text: 'Get started now',
-        href: '/',
+        text: 'Free Consultation',
+        href: '/contact',
+        icon: 'tabler:arrow-right',
       },
     ]}
-  />
+  >
+    <Fragment slot="title">
+      <span class="sm:whitespace-nowrap">Ready to Get Started?</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Get your free consultation today! Find out what we can do for your next big event. <br class="hidden md:inline" />
+    </Fragment>
+  </CallToAction>
 </Layout>
