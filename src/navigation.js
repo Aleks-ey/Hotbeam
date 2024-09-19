@@ -33,8 +33,8 @@ export const headerData = {
       href: getPermalink('/services'),
     },
     {
-      text: 'Pricing',
-      href: getPermalink('/pricing'),
+      text: 'Gallery',
+      href: getPermalink('/gallery'),
     },
     {
       text: 'Contact',
@@ -123,7 +123,7 @@ export const footerData = {
         { text: 'Home', href: '/' },
         { text: 'About', href: '/about' },
         { text: 'Services', href: '/services' },
-        { text: 'Pricing', href: '/pricing' },
+        { text: 'Gallery', href: '/gallery' },
         { text: 'Contact', href: '/contact' },
         { text: 'Events', href: '#'},
         { text: 'Gallery', href: '#' },

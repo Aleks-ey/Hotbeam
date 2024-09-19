@@ -1,14 +1,14 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
+import HeroOverlay from '~/components/custom/HeroOverlay.astro';
 import Features from '~/components/widgets/Features.astro';
 // import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
+// import FAQs from '~/components/widgets/FAQs.astro';
 // import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import Brands from '~/components/widgets/Brands.astro';
 
 // import hotbeamHeroVid from '~/assets/videos/HB_INTRO.mp4';
 
@@ -19,9 +19,10 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
-
-  <Hero
+  <!-- HeroOverlay Widget ************ -->
+  <HeroOverlay
+    title="Next level production suited to your needs"
+    subtitle="Hot Beam Productions is a Colorado-based full service production company that specializes in creating unforgettable experiences for events of all sizes."
     actions={[
       {
         variant: 'primary',
@@ -31,25 +32,11 @@ const metadata = {
       },
       { text: 'Upcoming Events', href: 'https://linktr.ee/hotbeamproductions' },
     ]}
-    video={{ src: '/videos/HB_INTRO.mp4', alt: 'Hot Beam Hero video' }}
-  >
-    <Fragment slot="title">
-      Find the perfect laser light show for your event.
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">Hot Beam Productions</span> is a Colorado-based full service production company that specializes in creating unforgettable experiences for events of all sizes.
-      </span>
-      <!-- <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-       Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages
-      & Blogs. -->
-    </Fragment>
-  </Hero>
-
-  <!-- Note Widget ******************* -->
-
-  <Note />
+    image={{
+      src: '/images/hotbeam_hero_lasers.jpg',
+      alt: 'DJ and Lasers',
+    }}
+  />
 
   <!-- Features Widget *************** -->
   <Features
@@ -58,41 +45,41 @@ const metadata = {
     subtitle="We provide one of the most professional and affordable production services in Colorado."
     items={[
       {
-        title: 'Expert DJ Services',
+        title: 'Professional DJ Solutions',
         description:
           'Experienced DJs bring the perfect vibe to every event, tailored playlists, and unmatched sound quality for a memorable night.',
-        icon: 'tabler:music',  // Changed icon to represent music and DJ services.
+        icon: 'tabler:music', // Changed icon to represent music and DJ services.
       },
       {
         title: 'Spectacular Light Shows',
         description:
           'Transform your event with state-of-the-art light shows, featuring dynamic visuals and effects that sync perfectly with the music.',
-        icon: 'tabler:prism-light',  // Changed icon to represent dynamic light effects.
+        icon: 'tabler:prism-light', // Changed icon to represent dynamic light effects.
       },
       {
         title: 'Event Customization',
         description:
           'Personalize your event with our flexible service options, ensuring each aspect of the entertainment is just how you envision.',
-        icon: 'tabler:settings',  // Changed icon to symbolize customization and settings.
+        icon: 'tabler:settings', // Changed icon to symbolize customization and settings.
       },
       {
         title: 'High-Energy Performance',
         description:
           'Our lightshow experiences are designed to energize the crowd, keeping the dance floor packed all night long.',
-        icon: 'tabler:activity',  // Changed icon to depict high energy and active engagement.
+        icon: 'tabler:activity', // Changed icon to depict high energy and active engagement.
       },
-      {
-        title: 'Professional Audio Equipment',
-        description:
-          'Utilize top-of-the-line audio equipment to deliver clear, crisp sound that elevates the music and entertainment experience.',
-        icon: 'tabler:device-speaker',  // Changed icon to indicate professional audio equipment.
-      },
-      {
-        title: 'Innovative Event Solutions',
-        description:
-          'We stay at the forefront of event technology and trends to provide innovative solutions that make your events stand out.',
-        icon: 'tabler:bulb',  // Retained icon for innovation and new ideas.
-      },
+      // {
+      //   title: 'Professional Audio Equipment',
+      //   description:
+      //     'Utilize top-of-the-line audio equipment to deliver clear, crisp sound that elevates the music and entertainment experience.',
+      //   icon: 'tabler:device-speaker', // Changed icon to indicate professional audio equipment.
+      // },
+      // {
+      //   title: 'Innovative Event Solutions',
+      //   description:
+      //     'We stay at the forefront of event technology and trends to provide innovative solutions that make your events stand out.',
+      //   icon: 'tabler:bulb', // Retained icon for innovation and new ideas.
+      // },
     ]}
   />
 
@@ -103,9 +90,9 @@ const metadata = {
     title="Our Process For Creating Your Dream Show"
     items={[
       {
-        title: 'Tailored Event Planning',
+        title: 'Engaging Visual Performances',
         description:
-          'Each event starts with detailed planning, ensuring every aspect is customized to meet your vision for the night.',
+          'Our lightshows are meticulously programmed to synchronize with the music, creating mesmerizing visual effects.',
       },
       {
         title: 'Dynamic Audio and Visual Setup',
@@ -119,7 +106,7 @@ const metadata = {
       },
     ]}
     image={{
-      src: '/images/dj_lasers_centered.JPG',
+      src: '/images/hotbeam_content_img.jpg',
       alt: 'Colorful Image',
     }}
   >
@@ -133,76 +120,8 @@ const metadata = {
     </Fragment>
   </Content>
 
-  <!-- Content Widget 2 -->
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'Versatile Event Formats',
-        description:
-          'From intimate gatherings to large-scale productions, our setups are designed to adapt and excel in any environment.',
-      },
-      {
-        title: 'State-of-the-Art Technology',
-        description:
-          'We use the latest in sound and lighting technology to enhance the sensory experience of every attendee.',
-      },
-      {
-        title: 'Engaging Visual Performances',
-        description:
-          'Our lightshows are meticulously programmed to synchronize with the music, creating mesmerizing visual effects.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Elevating Your Event</h3>
-      Harness our expertise in DJ services and laser shows to create dynamic, engaging events that resonate with your audience.
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Steps Widget ****************** -->
-  <!-- <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</em>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  /> -->
-
   <!-- FAQs Widget ******************* -->
-  <FAQs
+  <!-- <FAQs
     title="Frequently Asked Questions"
     subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
     tagline="FAQs"
@@ -239,17 +158,32 @@ const metadata = {
           "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
       },
     ]}
-  />
-
-  <!-- Stats Widget ****************** -->
-  <!-- <Stats
-    stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
-    ]}
   /> -->
+
+  <!-- Brands Widget ****************** -->
+  <Brands
+    title="Trusted By Leading Brands"
+    subtitle="We have had the privilege of working with some of the most renowned brands in the industry."
+    icons={[]}
+    images={[
+      {
+        src: 'https://lasershowprojector.com/cdn/shop/files/pangolin-and-kvant-lasers-official-logo.webp',
+        alt: 'Pangolin and Kvant',
+      },
+      {
+        src: 'https://laserosity.net/cdn/shop/files/Logo_461x412_-_MEMBER.png',
+        alt: 'Ilda',
+      },
+      {
+        src: 'https://laserosity.net/cdn/shop/files/Logo_Smoke_Factory_Block_Blue_CMYK-01.jpg',
+        alt: 'Smoke Factory',
+      },
+      {
+        src: 'https://laserosity.net/cdn/shop/files/EC_Bug-Full_Color-Light_BG.png',
+        alt: 'Elite Core',
+      },
+    ]}
+  />
 
   <!-- CallToAction Widget *********** -->
   <CallToAction
