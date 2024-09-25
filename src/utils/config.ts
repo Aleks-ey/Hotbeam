@@ -73,13 +73,8 @@ export interface AnalyticsConfig {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Detect environment (production vs local dev)
-const isProd = process.env.NODE_ENV === 'production';
-
 // Set the correct path for config.yaml based on the environment
-const configPath = isProd
-  ? path.join(__dirname, 'src', 'config.yaml') // For Netlify (production environment)
-  : path.join(process.cwd(), 'src', 'config.yaml'); // For local development
+const configPath = path.join(__dirname, '..', 'config.yaml'); // Move up to the parent directory of 'utils'
 
 const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as {
   site?: SiteConfig;
