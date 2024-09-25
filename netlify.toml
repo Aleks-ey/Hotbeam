@@ -1,6 +1,6 @@
 [build]
-  command = "cp src/config.yaml .netlify/build && npm run build"
   publish = "dist"
+  command = "npm run build"
 [build.processing.html]
   pretty_urls = false
 [[headers]]
