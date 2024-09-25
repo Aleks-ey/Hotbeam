@@ -1,0 +1,80 @@
+---
+// With `output: 'hybrid'` configured:
+export const prerender = false;
+import Layout from '~/layouts/PageLayout.astro';
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get('sb-access-token');
+const refreshToken = cookies.get('sb-refresh-token');
+
+if (accessToken && refreshToken) {
+  return redirect('/dashboard');
+}
+
+const metadata = {
+  title: 'Sign in',
+};
+---
+
+<Layout metadata={metadata}>
+  <div class="h-screen w-screen content-center">
+    <h1 class="text-3xl font-semibold text-center mb-6">Sign in</h1>
+    <form action="/api/auth/signin" method="post" class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-700"
+          required
+        />
+      </div>
+
+      <div class="mb-6">
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-700"
+          required
+        />
+      </div>
+
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          id="submitBtn"
+          disabled>Login</button
+        >
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const passwordInput = document.getElementById('password') as HTMLInputElement | null;
+    const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+
+    // Validate the form inputs
+    function validateForm() {
+      if (emailInput && passwordInput && submitBtn) {
+        // Ensure elements are not null
+        if (emailInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+          submitBtn.disabled = false; // Enable the submit button
+        } else {
+          submitBtn.disabled = true; // Keep the submit button disabled
+        }
+      }
+    }
+
+    // Attach event listeners if elements exist
+    if (emailInput && passwordInput) {
+      emailInput.addEventListener('input', validateForm);
+      passwordInput.addEventListener('input', validateForm);
+    }
+  </script>
+</Layout>

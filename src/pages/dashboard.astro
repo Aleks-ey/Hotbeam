@@ -1,0 +1,295 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { supabase } from '../lib/supabase';
+
+export const prerender = false;
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get('sb-access-token');
+const refreshToken = cookies.get('sb-refresh-token');
+
+if (!accessToken || !refreshToken) {
+  return redirect('/signin');
+}
+
+const { data, error } = await supabase.auth.setSession({
+  refresh_token: refreshToken.value,
+  access_token: accessToken.value,
+});
+
+if (error) {
+  cookies.delete('sb-access-token', {
+    path: '/',
+  });
+  cookies.delete('sb-refresh-token', {
+    path: '/',
+  });
+
+  return redirect('/signin');
+}
+
+const email = data.user?.email;
+
+const metadata = {
+  title: 'Dashboard',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Admin Dashboard Header ******************* -->
+  <div class="mx-auto p-8 mb-12">
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-white text-center mt-10">Hot Beam Admin Dashboard</h1>
+    <p class="text-lg text-gray-600 dark:text-gray-300 text-center mt-4">
+      Enjoy this absolutely beautiful admin page, {email}
+    </p>
+
+    <form action="/api/auth/signout" class="mt-8 flex justify-center">
+      <button
+        type="submit"
+        class="bg-red-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors"
+      >
+        Sign out
+      </button>
+    </form>
+  </div>
+
+  <!-- Admin Gallery Section ******************* -->
+  <div class="w-11/12 mx-auto">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Gallery Control</h2>
+    <div class="w-full bg-white shadow-2xl rounded-lg p-4 md:p-8 mb-12">
+      <!-- Upload Form -->
+      <h2 class="text-lg font-bold text-gray-600 text-center mt-4">Upload a new photo to the gallery storage:</h2>
+      <form
+        action="/dashboard"
+        method="post"
+        enctype="multipart/form-data"
+        id="upload-form"
+        class="my-8 flex flex-col md:flex-row justify-center"
+      >
+        <input
+          type="file"
+          name="file"
+          id="file"
+          class="block w-full text-sm text-gray-500
+             file:mr-4 file:py-2 file:px-2 md:file:px-4
+             file:rounded-md file:border-0
+             file:text-sm file:font-semibold
+             file:bg-indigo-600 file:text-white
+             hover:file:bg-indigo-700"
+          required
+        />
+        <button
+          type="submit"
+          class="w-fit mx-auto mt-10 md:mt-0 bg-blue-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Upload
+        </button>
+      </form>
+      <hr />
+      <!-- Display Images in gallery-display, allow removal of images -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-600 text-center mt-4">Current Gallery Images:</h2>
+        <div id="display-images" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8"></div>
+        <p id="no-display-images" class="text-center text-gray-500 mb-10"></p>
+      </div>
+      <hr />
+      <!-- Display Images in gallery-storage, allow moving to gallery-display -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-600 text-center mt-4">
+          Select New Image From Gallery Storage To Display:
+        </h2>
+        <div id="storage-images" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8"></div>
+        <p id="no-storage-images" class="text-center text-gray-500 mb-10"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side Script ******************* -->
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', () => {
+      const storageImagesContainer = document.getElementById('storage-images');
+      const displayImagesContainer = document.getElementById('display-images');
+      const noStorageImagesText = document.getElementById('no-storage-images');
+      const noDisplayImagesText = document.getElementById('no-display-images');
+      const uploadForm = document.getElementById('upload-form');
+
+      // Fetch images from the database
+      async function fetchImages() {
+        try {
+          const storageImages = await fetch('/api/gallery/storage-images').then((res) => res.json());
+          const displayImages = await fetch('/api/gallery/display-images').then((res) => res.json());
+
+          populateStorageImages(storageImages);
+          populateDisplayImages(displayImages);
+        } catch (error) {
+          console.error('Error fetching images:', error);
+        }
+      }
+
+      // Populate storage images
+      function populateStorageImages(storageImages) {
+        if (storageImages.length > 0) {
+          storageImages.forEach((image) => {
+            const imgWrapper = createImageWrapper(image, 'storage');
+            storageImagesContainer.appendChild(imgWrapper);
+          });
+        } else {
+          noStorageImagesText.textContent = 'No images are in storage.';
+        }
+      }
+
+      // Populate display images
+      function populateDisplayImages(displayImages) {
+        if (displayImages.length > 0) {
+          displayImages.forEach((image) => {
+            const imgWrapper = createImageWrapper(image, 'display');
+            displayImagesContainer.appendChild(imgWrapper);
+          });
+        } else {
+          noDisplayImagesText.textContent = 'No images are on display in the gallery.';
+        }
+      }
+
+      // Create the image wrapper with appropriate buttons for both storage and display sections
+      function createImageWrapper(image, section) {
+        const imgWrapper = document.createElement('div');
+        imgWrapper.classList.add('relative');
+
+        const img = document.createElement('img');
+        img.src = image.image_url;
+        img.alt = image.file_name;
+        img.classList.add('w-full', 'h-auto', 'rounded-lg');
+
+        if (section === 'storage') {
+          const addButton = createButton('Add', 'bg-green-600', 'right-2', () =>
+            addToDisplay(image.file_name, image.image_url)
+          );
+          const deleteButton = createButton('Delete', 'bg-red-600', 'left-2', () => confirmDelete(image.file_name));
+          imgWrapper.appendChild(addButton);
+          imgWrapper.appendChild(deleteButton);
+        } else if (section === 'display') {
+          const removeButton = createButton('Remove', 'bg-red-600', 'right-2', () =>
+            removeFromDisplay(image.file_name, image.image_url)
+          );
+          imgWrapper.appendChild(removeButton);
+        }
+
+        imgWrapper.appendChild(img);
+        return imgWrapper;
+      }
+
+      // Create a button with specific text, color class, position (left or right), and action
+      function createButton(text, colorClass, position, action) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.classList.add(
+          'absolute',
+          'top-2',
+          position,
+          'text-white',
+          'py-1',
+          'px-3',
+          'rounded',
+          colorClass,
+          'z-10'
+        );
+        button.addEventListener('click', action);
+        return button;
+      }
+
+      // Add an image from storage to display
+      async function addToDisplay(file_name, image_url) {
+        try {
+          const response = await fetch('/api/gallery/add-to-display', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ file_name, image_url }),
+          });
+
+          if (response.ok) {
+            alert('Image moved to display successfully!');
+            location.reload();
+          } else {
+            alert('Failed to move the image to display.');
+          }
+        } catch (error) {
+          console.error('Error moving image to display:', error);
+        }
+      }
+
+      // Remove an image from the display gallery
+      async function removeFromDisplay(file_name, image_url) {
+        try {
+          const response = await fetch('/api/gallery/remove-from-display', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ file_name, image_url }),
+          });
+
+          if (response.ok) {
+            alert('Image removed from display successfully!');
+            location.reload();
+          } else {
+            alert('Failed to remove the image from display.');
+          }
+        } catch (error) {
+          console.error('Error removing image from display:', error);
+        }
+      }
+
+      // Confirm and delete image from storage
+      async function confirmDelete(file_name) {
+        if (confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
+          deleteFromStorage(file_name);
+        }
+      }
+
+      // Delete an image from storage
+      async function deleteFromStorage(file_name) {
+        try {
+          const response = await fetch('/api/gallery/delete-from-storage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ file_name }),
+          });
+
+          if (response.ok) {
+            alert('Image deleted from storage successfully!');
+            location.reload();
+          } else {
+            alert('Failed to delete the image from storage.');
+          }
+        } catch (error) {
+          console.error('Error deleting image from storage:', error);
+        }
+      }
+
+      // Handle the form submission for image upload
+      uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(uploadForm);
+
+        try {
+          const response = await fetch('/api/gallery/add-to-storage', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            alert('Image uploaded successfully!');
+            location.reload();
+          } else {
+            const errorData = await response.json();
+            alert('Failed to upload image: ' + errorData.error);
+          }
+        } catch (error) {
+          console.error('Error uploading image:', error);
+        }
+      });
+
+      // Fetch images on page load
+      fetchImages();
+    });
+  </script>
+</Layout>
