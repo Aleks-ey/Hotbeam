@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import yaml from 'js-yaml';
 import merge from 'lodash.merge';
 
@@ -67,7 +68,15 @@ export interface AnalyticsConfig {
   };
 }
 
-const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
+// Detect environment (production vs local dev)
+const isProd = process.env.NODE_ENV === 'production';
+
+// Set the correct path for config.yaml based on the environment
+const configPath = isProd
+  ? path.join(__dirname, 'src', 'config.yaml') // For Netlify (production environment)
+  : path.join(process.cwd(), 'src', 'config.yaml'); // For local development
+
+const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as {
   site?: SiteConfig;
   metadata?: MetaDataConfig;
   i18n?: I18NConfig;
@@ -78,7 +87,7 @@ const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   analytics?: unknown;
 };
 
-const DEFAULT_SITE_NAME = 'Website';
+const DEFAULT_SITE_NAME = 'Hot Beam Productions';
 
 const getSite = () => {
   const _default = {

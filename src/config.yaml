@@ -1,6 +1,6 @@
 site:
   name: Hot Beam Productions
-  site: 'https://astrowind.vercel.app'
+  site: 'https://hotbeamproductions.com/'
   base: '/'
   trailingSlash: false
 
