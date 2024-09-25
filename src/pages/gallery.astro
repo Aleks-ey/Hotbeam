@@ -81,12 +81,17 @@ if (error) {
   </CallToAction>
 
   <!-- Modal for Image Carousel ******************* -->
-  <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 justify-center items-center">
-    <button id="close-btn" class="absolute top-5 right-5 bg-white text-black py-2 px-4 rounded-full"> Close</button>
+  <div
+    id="lightbox-modal"
+    class="hidden md:hidden fixed inset-0 bg-black bg-opacity-80 z-50 justify-center items-center"
+  >
+    <button id="close-btn" class="absolute z-10 top-5 right-5 bg-white text-black py-2 px-4 rounded-full">
+      Close
+    </button>
 
-    <button id="prev-btn" class="absolute left-5 bg-white text-black py-2 px-4 rounded-full"> Prev</button>
+    <button id="prev-btn" class="absolute z-10 left-5 bg-white text-black py-2 px-4 rounded-full"> Prev</button>
 
-    <button id="next-btn" class="absolute right-5 bg-white text-black py-2 px-4 rounded-full"> Next</button>
+    <button id="next-btn" class="absolute z-10 right-5 bg-white text-black py-2 px-4 rounded-full"> Next</button>
 
     <img id="modal-image" src="" class="max-w-full max-h-full object-contain rounded-lg" />
   </div>
@@ -117,14 +122,14 @@ if (error) {
       // Function to open the modal
       function openModal(index) {
         modalImage.src = galleryImages[index];
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal.classList.remove('md:hidden');
+        modal.classList.add('md:flex');
       }
 
       // Function to close the modal
       document.getElementById('close-btn').addEventListener('click', () => {
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
+        modal.classList.remove('md:flex');
+        modal.classList.add('md:hidden');
       });
 
       // Show next image

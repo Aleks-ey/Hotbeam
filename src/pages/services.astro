@@ -13,9 +13,9 @@ const metadata = {
   <!-- Hero Widget ******************* -->
   <Hero
     tagline="Elevate Your Event"
-    title="Transforming Events with Laser and Lighting Solutions"
+    title="Transforming Events with our Range of Full Service Production Equipment"
     subtitle="Experience the art of illumination with our cutting-edge laser and lighting designs, tailored to make your event unforgettable."
-    actions={[{ variant: 'primary', target: '_blank', text: 'Explore Our Services', href: '/' }]}
+    actions={[{ variant: 'primary', text: 'Explore Our Services', href: '#features-section' }]}
     image={{
       src: '/images/nightwavez_1.JPG',
       alt: 'Laser and Lighting Hero Image',
@@ -23,33 +23,45 @@ const metadata = {
   />
 
   <!-- Features2 Widget ************** -->
-  <Features2
-    title="Our Expertise"
-    subtitle="Discover how our laser and lighting solutions can elevate your event."
-    columns={3}
-    items={[
-      {
-        title: 'Laser Light Shows',
-        description: 'Mesmerizing laser light shows that will leave your audience in awe.',
-        icon: 'tabler:prism-light',
-      },
-      {
-        title: 'Custom Lighting Design',
-        description: 'Tailored lighting solutions to match your events unique style and atmosphere.',
-        icon: 'tabler:bulb',
-      },
-      {
-        title: 'Event Production Services',
-        description: 'Full-service event production, from concept to execution, ensuring a seamless experience.',
-        icon: 'tabler:polaroid',
-      },
-      {
-        title: 'LED Video Wall',
-        description: 'Transform any surface into a canvas for dynamic visuals and immersive experiences.',
-        icon: 'tabler:artboard',
-      },
-    ]}
-  />
+  <div id="features-section">
+    <Features2
+      title="Our Expertise"
+      subtitle="Discover how our laser and lighting solutions can elevate your event."
+      columns={3}
+      items={[
+        {
+          title: 'Laser Light Shows',
+          description: 'Mesmerizing laser light shows that will leave your audience in awe.',
+          icon: 'tabler:prism-light',
+        },
+        {
+          title: 'Custom Lighting Design',
+          description: 'Tailored lighting solutions to match your events unique style and atmosphere.',
+          icon: 'tabler:bulb',
+        },
+        {
+          title: 'Event Production Services',
+          description: 'Full-service event production, from concept to execution, ensuring a seamless experience.',
+          icon: 'tabler:polaroid',
+        },
+        {
+          title: 'LED Video Wall',
+          description: 'Transform any surface into a canvas for dynamic visuals and immersive experiences.',
+          icon: 'tabler:artboard',
+        },
+        {
+          title: 'Special Effects',
+          description: 'CO2, Confetti, Pyro, and so much more!',
+          icon: 'tabler:confetti',
+        },
+        {
+          title: 'Professional Audio',
+          description: 'Outfit your event with the highest quality audio services on the market.',
+          icon: 'tabler:device-speaker',
+        },
+      ]}
+    />
+  </div>
 
   <!-- CallToAction Widget *********** -->
 
