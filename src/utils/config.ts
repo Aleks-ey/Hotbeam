@@ -1,6 +1,4 @@
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
 import merge from 'lodash.merge';
 
@@ -69,14 +67,7 @@ export interface AnalyticsConfig {
   };
 }
 
-// ESM-compliant way to get __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Set the correct path for config.yaml based on the environment
-const configPath = path.join(__dirname, '..', 'config.yaml'); // Move up to the parent directory of 'utils'
-
-const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as {
+const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   site?: SiteConfig;
   metadata?: MetaDataConfig;
   i18n?: I18NConfig;
