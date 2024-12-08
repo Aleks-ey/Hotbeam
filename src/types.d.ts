@@ -205,6 +205,7 @@ export interface Form {
   disclaimer?: Disclaimer;
   button?: string;
   description?: string;
+  onClick?: (event: Event) => void;
 }
 
 // WIDGETS

@@ -3,9 +3,42 @@ import Layout from '~/layouts/PageLayout.astro';
 import HeroText from '~/components/widgets/HeroText.astro';
 import ContactUs from '~/components/widgets/Contact.astro';
 import Features2 from '~/components/widgets/Features2.astro';
+import { supabase } from '../lib/supabase';
+
+export const prerender = false;
 
 const metadata = {
   title: 'Contact',
+};
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  console.log('Form submitted!');
+  const formData = new FormData(event.target);
+
+  const data = Object.fromEntries(formData.entries());
+
+  try {
+    const { error } = await supabase
+      .from('contacts') // Your Supabase table name
+      .insert([data]);
+
+    if (error) {
+      console.error('Error saving data to Supabase:', error.message);
+      alert('There was an issue submitting your form. Please try again.');
+    } else {
+      alert('Form submitted successfully!');
+      event.target.reset();
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    alert('An unexpected error occurred. Please try again.');
+  }
+};
+
+const submit = () => {
+  console.log('Form submitted!');
 };
 ---
 
@@ -37,6 +70,7 @@ const metadata = {
         'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
     }}
     description="Our team typically responds within 24 business hours."
+    onClick={handleSubmit}
   />
 
   <!-- Features2 Widget ************** -->
@@ -47,21 +81,21 @@ const metadata = {
     items={[
       {
         title: 'General support',
-        description: `Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.`,
+        description: `Reach out for assistance with event planning, troubleshooting booking or payment issues, navigating our services, or general questions about our laser and light show offerings.`,
       },
       {
         title: 'Contact sales',
         description:
-          'Chat with us for questions about purchases, customization options, licensing for commercial use, inquiries about specific template, etc.',
+          'Get in touch for inquiries about booking laser shows, customizing event packages, pricing for commercial productions, or licensing our effects for your concerts or events.',
       },
       {
         title: 'Phone',
-        description: '+1 (234) 567-890',
+        description: '+1 (720) 955-8929',
         icon: 'tabler:headset',
       },
       {
         title: 'Email',
-        description: 'contact@support.com',
+        description: 'hotbeamproductions@gmail.com',
         icon: 'tabler:mail',
       },
     ]}
