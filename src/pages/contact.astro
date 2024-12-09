@@ -3,42 +3,11 @@ import Layout from '~/layouts/PageLayout.astro';
 import HeroText from '~/components/widgets/HeroText.astro';
 import ContactUs from '~/components/widgets/Contact.astro';
 import Features2 from '~/components/widgets/Features2.astro';
-import { supabase } from '../lib/supabase';
 
 export const prerender = false;
 
 const metadata = {
   title: 'Contact',
-};
-
-const handleSubmit = async (event) => {
-  event.preventDefault();
-
-  console.log('Form submitted!');
-  const formData = new FormData(event.target);
-
-  const data = Object.fromEntries(formData.entries());
-
-  try {
-    const { error } = await supabase
-      .from('contacts') // Your Supabase table name
-      .insert([data]);
-
-    if (error) {
-      console.error('Error saving data to Supabase:', error.message);
-      alert('There was an issue submitting your form. Please try again.');
-    } else {
-      alert('Form submitted successfully!');
-      event.target.reset();
-    }
-  } catch (err) {
-    console.error('Unexpected error:', err);
-    alert('An unexpected error occurred. Please try again.');
-  }
-};
-
-const submit = () => {
-  console.log('Form submitted!');
 };
 ---
 
@@ -65,12 +34,8 @@ const submit = () => {
     textarea={{
       label: 'Message',
     }}
-    disclaimer={{
-      label:
-        'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
-    }}
     description="Our team typically responds within 24 business hours."
-    onClick={handleSubmit}
+    action="/api/contact/submit"
   />
 
   <!-- Features2 Widget ************** -->

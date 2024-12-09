@@ -2,10 +2,12 @@
 import type { Form } from '~/types';
 import Button from '~/components/ui/Button.astro';
 
-const { inputs, textarea, disclaimer, button = 'Contact us', description = '', onClick } = Astro.props as Form;
+export const prerender = false;
+
+const { inputs, textarea, disclaimer, button = 'Contact us', description = '', action } = Astro.props as Form;
 ---
 
-<form>
+<form action={action} method="POST">
   {
     inputs &&
       inputs.map(
@@ -38,7 +40,7 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '', o
         </label>
         <textarea
           id="textarea"
-          name="textarea"
+          name="message"
           rows={textarea.rows ? textarea.rows : 4}
           placeholder={textarea.placeholder}
           class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
@@ -70,7 +72,7 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '', o
   {
     button && (
       <div class="mt-10 grid">
-        <Button variant="primary" type="submit" onClick={onClick}>
+        <Button variant="primary" type="submit">
           {button}
         </Button>
       </div>
@@ -84,4 +86,29 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '', o
       </div>
     )
   }
+  <!-- Client-side Script ******************* -->
+  <script type="module">
+    document.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert('Thank you for your message!');
+          form.reset();
+        } else {
+          const errorData = await response.json();
+          alert('Failed to submit form: ' + errorData.error);
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
+    });
+  </script>
 </form>
