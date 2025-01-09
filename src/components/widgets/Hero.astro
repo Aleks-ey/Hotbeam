@@ -11,7 +11,10 @@ export interface Props {
   content?: string;
   actions?: string | CallToAction[];
   video?: string | any; // TODO: find HTMLElementProps
-  image?: string | unknown; // TODO: find HTMLElementProps
+  image1?: string | unknown; // TODO: find HTMLElementProps
+  image1Title?: string;
+  image2?: string | unknown; // TODO: find HTMLElementProps
+  image2Title?: string;
 }
 
 const {
@@ -22,7 +25,10 @@ const {
   content = await Astro.slots.render('content'),
   actions = await Astro.slots.render('actions'),
   video = await Astro.slots.render('video'),
-  image = await Astro.slots.render('image'),
+  image1 = await Astro.slots.render('image'),
+  image1Title = await Astro.slots.render('image1Title'),
+  image2 = await Astro.slots.render('image'),
+  image2Title = await Astro.slots.render('image2Title'),
 } = Astro.props;
 ---
 
@@ -75,26 +81,18 @@ const {
               {typeof video === 'string' ? (
                 <Fragment set:html={video} />
               ) : (
-                <video
-                  class="w-full h-auto"
-                  autoplay
-                  loop
-                  muted
-                  playsinline
-                  poster={video.poster}
-                  src={video.src}
-                />
+                <video class="w-full h-auto" autoplay loop muted playsinline poster={video.poster} src={video.src} />
               )}
             </div>
           )
         }
       </div>
-      <div>
-        {
-          image && (
+      {
+        image1 && !image2 && (
+          <div>
             <div class="relative m-auto max-w-5xl">
-              {typeof image === 'string' ? (
-                <Fragment set:html={image} />
+              {typeof image1 === 'string' ? (
+                <Fragment set:html={image1} />
               ) : (
                 <Image
                   class="mx-auto rounded-md w-full"
@@ -103,13 +101,61 @@ const {
                   loading="eager"
                   width={1024}
                   height={576}
-                  {...image}
+                  {...image1}
                 />
               )}
             </div>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
+      {
+        image1 && image2 && (
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="relative m-auto max-w-5xl">
+              {typeof image1 === 'string' ? (
+                <Fragment set:html={image1} />
+              ) : (
+                <Image
+                  class="mx-auto rounded-md w-full"
+                  widths={[400, 768, 1024, 2040]}
+                  sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+                  loading="eager"
+                  width={1024}
+                  height={576}
+                  {...image1}
+                />
+              )}
+              {image1Title && (
+                <h3
+                  class="absolute top-1 right-3 text-1xl md:text-2xl font-bold leading-tighter tracking-tighter mb-4 font-heading italic dark:text-gray-200"
+                  set:html={image1Title}
+                />
+              )}
+            </div>
+            <div class="relative m-auto max-w-5xl">
+              {typeof image2 === 'string' ? (
+                <Fragment set:html={image2} />
+              ) : (
+                <Image
+                  class="mx-auto rounded-md w-full"
+                  widths={[400, 768, 1024, 2040]}
+                  sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+                  loading="eager"
+                  width={1024}
+                  height={576}
+                  {...image2}
+                />
+              )}
+              {image2Title && (
+                <h3
+                  class="absolute top-1 right-3 text-1xl md:text-2xl font-bold leading-tighter tracking-tighter mb-4 font-heading italic dark:text-gray-200"
+                  set:html={image2Title}
+                />
+              )}
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </section>
